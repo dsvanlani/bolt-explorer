@@ -10,10 +10,11 @@ import (
 )
 
 var keyBindings = []KeyBinding{
-	{Key: "↑/↓", Description: "navigate"},
+	{Key: "w/s", Description: "navigate"},
 	{Key: "enter", Description: "select"},
-	{Key: "esc", Description: "back"},
+	{Key: "a", Description: "up one level"},
 	{Key: "q", Description: "quit"},
+	{Key: "f", Description: "toggle search"},
 }
 
 // App is the top level model of the application
@@ -63,6 +64,9 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	responses = append(responses, response)
 
 	_, response = a.menu.Update(msg)
+	responses = append(responses, response)
+
+	_, response = a.header.Update(msg)
 	responses = append(responses, response)
 
 	_, response = a.footer.Update(msg)

@@ -54,11 +54,6 @@ func (r *Router) GetLocation() string {
 }
 
 func (r *Router) SetLocation(location string) {
-	route := r.Paths[location]
-	if route == nil || !route.IsBucket() {
-		// do nothing
-		return
-	}
 
 	r.Location = location
 }
@@ -79,6 +74,16 @@ func (r *Router) GetPathsForLocation() []string {
 	sort.Strings(keys)
 
 	return keys
+}
+
+func (r *Router) GoUpOneLevel() {
+	if r.Location == "" {
+		return
+	}
+
+	route := r.Paths[r.Location]
+
+	r.SetLocation(route.Parent)
 }
 
 func (r *Route) IsBucket() bool {

@@ -33,11 +33,18 @@ type Styles struct {
 	HelpDivider lipgloss.Style
 }
 
+const (
+	bahamaBlue lipgloss.Color = "#204285"
+	jordyBlue  lipgloss.Color = "#74a6d9"
+	summerSky  lipgloss.Color = "#4abaeb"
+	white      lipgloss.Color = "#fff"
+)
+
 // DefaultStyles returns default styles for the app
 func DefaultStyles() *Styles {
 	s := new(Styles)
 
-	s.ActiveBorderColor = lipgloss.Color("62")
+	s.ActiveBorderColor = bahamaBlue
 	s.InactiveBorderColor = lipgloss.Color("236")
 
 	s.App = lipgloss.NewStyle().
@@ -57,10 +64,10 @@ func DefaultStyles() *Styles {
 	s.Header = lipgloss.NewStyle().
 		BorderStyle(s.HeaderBorder).
 		BorderForeground(s.ActiveBorderColor).
-		Foreground(lipgloss.Color("39")).
+		Foreground(jordyBlue).
 		PaddingLeft(1).
 		MarginLeft(2).
-		Width(55).
+		Width(100).
 		Bold(true)
 
 	s.PageBorder = lipgloss.Border{
@@ -77,7 +84,7 @@ func DefaultStyles() *Styles {
 	s.Page = lipgloss.NewStyle().
 		BorderStyle(s.PageBorder).
 		BorderForeground(s.ActiveBorderColor).
-		Width(99).
+		Width(100).
 		Height(11)
 
 	s.MenuBorder = lipgloss.Border{
@@ -96,8 +103,7 @@ func DefaultStyles() *Styles {
 		BorderForeground(s.ActiveBorderColor).
 		PaddingLeft(2).
 		MarginLeft(2).
-		Width(55).
-		Height(12)
+		Width(100)
 
 	s.MenuInactive = lipgloss.NewStyle().
 		BorderStyle(s.MenuBorder).
@@ -109,33 +115,36 @@ func DefaultStyles() *Styles {
 		Height(12)
 
 	s.MenuCursor = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("213")).
+		Foreground(summerSky).
 		SetString(">")
 
 	s.MenuItem = lipgloss.NewStyle().
 		PaddingLeft(2)
 
 	s.SelectedMenuItem = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("207")).
+		Foreground(summerSky).
+		Bold(true).
 		PaddingLeft(1)
 
 	s.Bucket = lipgloss.NewStyle().
 		Foreground(lipgloss.Color("241"))
 
-	s.Key = lipgloss.NewStyle()
+	s.Key = lipgloss.NewStyle().
+		Align(lipgloss.Center).
+		MaxWidth(98)
 
 	s.Footer = lipgloss.NewStyle().
 		MarginLeft(3)
 
 	s.HelpKey = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("241")).
+		Foreground(white).
 		Bold(true)
 
 	s.HelpValue = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("239"))
+		Foreground(white)
 
 	s.HelpDivider = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("237")).
+		Foreground(white).
 		SetString(" • ")
 
 	return s

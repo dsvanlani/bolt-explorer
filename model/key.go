@@ -1,14 +1,18 @@
 package model
 
 import (
+	"encoding/json"
+
+	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/observiq/bolt-explorer/style"
 )
 
 // KeyView is the value of a key in a bucket
 type KeyView struct {
-	styles *style.Styles
-	value  []byte
+	styles   *style.Styles
+	value    []byte
+	viewport viewport.Model
 }
 
 // NewKeyView creates a new key value model
@@ -25,11 +29,17 @@ func (kv *KeyView) Init() tea.Cmd {
 }
 
 // Update is a noop
-func (kv *KeyView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	return kv, nil
+func (m *KeyView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	return m, nil
 }
 
 // View renders the key value model
 func (kv *KeyView) View() string {
-	return kv.styles.Key.Render(string(kv.value))
+	kv.viewport = viewport.New(98, 5000)
+
+	obj := make(map[string]any)
+	json.Unmarshal(kv.value, &obj)
+	j, _ := json.MarshalIndent(obj, "", "  ")
+	kv.viewport.SetContent(string(j))
+	return kv.viewport.View()
 }
