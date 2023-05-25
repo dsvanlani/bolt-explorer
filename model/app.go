@@ -36,7 +36,7 @@ func NewApp(router *router.Router, styles *style.Styles) *App {
 
 	return &App{
 		styles: styles,
-		header: NewHeader("bolt-explorer", styles),
+		header: NewHeader("bolt-explorer", styles, router),
 		menu:   NewMenu(menuItems, styles, router),
 		footer: NewFooter(keyBindings, styles),
 		page:   NewPage(menuItems[0].Content(), styles),

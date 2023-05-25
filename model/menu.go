@@ -1,6 +1,7 @@
 package model
 
 import (
+	"sort"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -78,7 +79,7 @@ func (m *Menu) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 
 		case "down":
-			if m.selectedIndex < len(m.items)-1 && m.selectedIndex < m.maxItems()-1 {
+			if m.selectedIndex < len(m.GetItems())-1 && m.selectedIndex < m.maxItems()-1 {
 				m.selectedIndex++
 				return m.sendMenuChangeEvent()
 			}
@@ -111,12 +112,14 @@ func (m *Menu) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 				m.items = []MenuItem{}
 				m.selectedIndex = 0
+
 				for _, item := range m.router.GetPathsForLocation() {
 					m.items = append(m.items, NewMenuItem(item, m.router, m.styles))
 				}
 
 				return m.sendMenuChangeEvent()
 			}
+
 		}
 	}
 	return m, nil
@@ -128,7 +131,7 @@ func (m *Menu) sendMenuChangeEvent() (tea.Model, tea.Cmd) {
 		return m, nil
 	}
 	cmd := func() tea.Msg {
-		return m.items[m.selectedIndex]
+		return m.GetItems()[m.selectedIndex]
 	}
 
 	return m, cmd
@@ -136,9 +139,10 @@ func (m *Menu) sendMenuChangeEvent() (tea.Model, tea.Cmd) {
 
 // View renders the menu model
 func (m *Menu) View() string {
-	s := strings.Builder{}
+	items := m.GetItems()
 
-	viewport := m.items[m.scrollOffset:]
+	s := strings.Builder{}
+	viewport := items[m.scrollOffset:]
 
 	if len(viewport) > m.maxItems() {
 		viewport = viewport[:m.maxItems()]
@@ -165,6 +169,27 @@ func (m *Menu) View() string {
 	}
 
 	return m.styles.Menu.Copy().Height(m.desiredHeight()).Render(s.String())
+}
+
+func (m *Menu) GetItems() []MenuItem {
+	items := []MenuItem{}
+	if m.router.SearchMode {
+		if m.router.SearchValue != "" {
+			for path := range m.router.Paths {
+				if strings.Contains(strings.ToLower(path), strings.ToLower(m.router.SearchValue)) {
+					items = append(items, NewMenuItem(path, m.router, m.styles))
+				}
+			}
+		}
+
+	} else {
+		items = m.items
+	}
+	// sort the items
+	sort.Slice(items, func(i, j int) bool {
+		return items[i].key < items[j].key
+	})
+	return items
 }
 
 func (m *Menu) desiredHeight() int {

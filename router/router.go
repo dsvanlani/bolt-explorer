@@ -31,9 +31,11 @@ func NewRoute(path string, parent string, value []byte) *Route {
 }
 
 type Router struct {
-	Paths    map[string]*Route
-	Location string
-	DB       *bbolt.DB
+	Paths       map[string]*Route
+	Location    string
+	DB          *bbolt.DB
+	SearchMode  bool
+	SearchValue string
 }
 
 func NewRouter(routes []*Route, db *bbolt.DB) *Router {
