@@ -35,6 +35,11 @@ func (p *Page) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		p.viewport = viewport.New(p.styles.Page.GetWidth(), p.height)
 	case MenuItem:
 		p.content = msg.Content()
+	case tea.KeyMsg:
+		if msg.String() == "up" || msg.String() == "down" {
+			return p, nil
+		}
+
 	}
 
 	viewport, cmd := p.viewport.Update(msg)
