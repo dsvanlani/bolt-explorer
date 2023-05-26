@@ -190,6 +190,12 @@ func (m *Menu) View() string {
 
 			builder := strings.Builder{}
 
+			if !m.router.SearchMode {
+				s.WriteString(m.styles.MenuItem.Render(truncated))
+				s.WriteString("\n")
+				continue
+			}
+
 			if !strings.Contains(truncated, m.router.SearchValue) {
 				s.WriteString(m.styles.MenuItem.Render(truncated))
 			}
