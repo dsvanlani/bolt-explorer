@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/observiq/bolt-explorer/logger"
 	"github.com/observiq/bolt-explorer/router"
 	"github.com/observiq/bolt-explorer/style"
 )
@@ -201,8 +200,6 @@ func (m *Menu) View() string {
 			}
 
 			splits := strings.Split(truncated, m.router.SearchValue)
-			logger.Logger().Debug("splits: ", splits)
-			logger.Logger().Debug("truncated: ", truncated)
 			if len(splits) > 1 {
 				for i, split := range splits {
 					builder.WriteString(split)
