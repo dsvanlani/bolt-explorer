@@ -16,14 +16,32 @@ import (
 )
 
 func main() {
+	// get the first arge as filepath
+	filepath := os.Args[1]
+	if filepath == "" {
+		fmt.Println("No filepath argument provided")
+		os.Exit(1)
+	}
 
-	db, err := bbolt.Open("/Users/dsvanlani/.bindplane/storage", 0666, nil)
+	fmt.Println(filepath)
+
+	// check that file exists
+	if _, err := os.Stat(filepath); os.IsNotExist(err) {
+		fmt.Println("File does not exist")
+		os.Exit(1)
+	}
+
+	db, err := bbolt.Open(filepath, 0666, nil)
 	if err != nil {
 		fmt.Println("Failed to open DB, %w", err)
 		os.Exit(1)
 	}
-	reader.ParseDB(db)
+
 	keys, err := reader.ParseDB(db)
+	if err != nil {
+		fmt.Println("Failed to parse DB, %w", err)
+		os.Exit(1)
+	}
 
 	router := router.NewRouter(keys, db)
 	styles := style.DefaultStyles()
