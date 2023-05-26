@@ -24,6 +24,7 @@ type App struct {
 	page   *Page
 	footer *Footer
 	styles *style.Styles
+	router *router.Router
 }
 
 // NewApp creates a new app with the supplied styles
@@ -40,6 +41,7 @@ func NewApp(router *router.Router, styles *style.Styles) *App {
 		menu:   NewMenu(menuItems, styles, router),
 		footer: NewFooter(keyBindings, styles),
 		page:   NewPage(menuItems[0].Content(), styles),
+		router: router,
 	}
 }
 
@@ -55,8 +57,13 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "q", "ctrl+c":
+		case "ctrl+c":
+
 			return a, tea.Quit
+		case "q":
+			if !a.router.SearchMode {
+				return a, tea.Quit
+			}
 		}
 	}
 

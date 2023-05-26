@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/observiq/bolt-explorer/logger"
 	"github.com/observiq/bolt-explorer/router"
 	"github.com/observiq/bolt-explorer/style"
 )
@@ -155,10 +156,57 @@ func (m *Menu) View() string {
 		}
 		switch {
 		case i == m.selectedIndex:
+
 			s.WriteString(m.styles.MenuCursor.String())
-			s.WriteString(m.styles.SelectedMenuItem.Render(truncateString(item.key, 80)))
+
+			// split the runcated string by the m.router.SearchValue
+			truncated := truncateString(item.key, 80)
+			builder := strings.Builder{}
+			if !m.router.SearchMode {
+				s.WriteString(m.styles.SelectedMenuItem.Render(truncated))
+				s.WriteString("\n")
+				continue
+			}
+
+			if !strings.Contains(truncated, m.router.SearchValue) {
+				s.WriteString(m.styles.SelectedMenuItem.Render(truncated))
+			}
+
+			splits := strings.Split(truncated, m.router.SearchValue)
+
+			if len(splits) > 1 {
+				for i, split := range splits {
+					builder.WriteString(split)
+					if i < len(splits)-1 {
+						builder.WriteString(m.styles.MenuItemTextHighlight.Render(m.router.SearchValue))
+					}
+				}
+			}
+
+			s.WriteString(m.styles.SelectedMenuItem.Render(builder.String()))
 		default:
-			s.WriteString(m.styles.MenuItem.Render(truncateString(item.key, 80)))
+			// split the runcated string by the m.router.SearchValue
+			truncated := truncateString(item.key, 80)
+
+			builder := strings.Builder{}
+
+			if !strings.Contains(truncated, m.router.SearchValue) {
+				s.WriteString(m.styles.MenuItem.Render(truncated))
+			}
+
+			splits := strings.Split(truncated, m.router.SearchValue)
+			logger.Logger().Debug("splits: ", splits)
+			logger.Logger().Debug("truncated: ", truncated)
+			if len(splits) > 1 {
+				for i, split := range splits {
+					builder.WriteString(split)
+					if i < len(splits)-1 {
+						builder.WriteString(m.styles.MenuItemTextHighlight.Render(m.router.SearchValue))
+					}
+				}
+			}
+
+			s.WriteString(m.styles.MenuItem.Render(builder.String()))
 		}
 		s.WriteRune('\n')
 

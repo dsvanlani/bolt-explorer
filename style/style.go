@@ -17,12 +17,14 @@ type Styles struct {
 	PageBorder lipgloss.Border
 	Page       lipgloss.Style
 
-	Menu             lipgloss.Style
-	MenuInactive     lipgloss.Style
-	MenuCursor       lipgloss.Style
-	MenuItem         lipgloss.Style
-	MenuBorder       lipgloss.Border
-	SelectedMenuItem lipgloss.Style
+	Menu                  lipgloss.Style
+	MenuInactive          lipgloss.Style
+	MenuCursor            lipgloss.Style
+	MenuItem              lipgloss.Style
+	MenuItemText          lipgloss.Style
+	MenuItemTextHighlight lipgloss.Style
+	MenuBorder            lipgloss.Border
+	SelectedMenuItem      lipgloss.Style
 
 	Bucket lipgloss.Style
 	Key    lipgloss.Style
@@ -34,10 +36,11 @@ type Styles struct {
 }
 
 const (
-	bahamaBlue lipgloss.Color = "#204285"
-	jordyBlue  lipgloss.Color = "#74a6d9"
-	summerSky  lipgloss.Color = "#4abaeb"
-	white      lipgloss.Color = "#fff"
+	bahamaBlue  lipgloss.Color = "#204285"
+	jordyBlue   lipgloss.Color = "#74a6d9"
+	summerSky   lipgloss.Color = "#4abaeb"
+	white       lipgloss.Color = "#fff"
+	highlighted lipgloss.Color = "#3DDB16"
 )
 
 // DefaultStyles returns default styles for the app
@@ -120,6 +123,9 @@ func DefaultStyles() *Styles {
 
 	s.MenuItem = lipgloss.NewStyle().
 		PaddingLeft(2)
+
+	s.MenuItemTextHighlight = lipgloss.NewStyle().
+		Foreground(highlighted)
 
 	s.SelectedMenuItem = lipgloss.NewStyle().
 		Foreground(summerSky).
