@@ -8,8 +8,8 @@ import (
 	// "github.com/observiq/observiq-otel-cli/internal/otlp"
 
 	tea "github.com/charmbracelet/bubbletea"
-	reader "github.com/observiq/bolt-explorer/Reader"
 	"github.com/observiq/bolt-explorer/model"
+	"github.com/observiq/bolt-explorer/reader"
 	"github.com/observiq/bolt-explorer/router"
 	"github.com/observiq/bolt-explorer/style"
 	"go.etcd.io/bbolt"
