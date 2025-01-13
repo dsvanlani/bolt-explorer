@@ -8,7 +8,7 @@ import (
 	// "github.com/observiq/observiq-otel-cli/internal/otlp"
 
 	tea "github.com/charmbracelet/bubbletea"
-	reader "github.com/observiq/bolt-explorer/Reader"
+	reader "github.com/observiq/bolt-explorer/db_reader"
 	"github.com/observiq/bolt-explorer/model"
 	"github.com/observiq/bolt-explorer/router"
 	"github.com/observiq/bolt-explorer/style"
@@ -16,7 +16,7 @@ import (
 )
 
 func main() {
-	// get the first arge as filepath
+	// validate first arg is filepath
 	filepath := os.Args[1]
 	if filepath == "" {
 		fmt.Println("No filepath argument provided")
