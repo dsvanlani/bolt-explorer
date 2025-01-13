@@ -1,11 +1,9 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
-
-	// "github.com/observiq/observiq-otel-cli/fetcher"
-	// "github.com/observiq/observiq-otel-cli/internal/otlp"
 
 	tea "github.com/charmbracelet/bubbletea"
 	reader "github.com/observiq/bolt-explorer/db_reader"
@@ -17,9 +15,9 @@ import (
 
 func main() {
 	// validate first arg is filepath
-	filepath := os.Args[1]
-	if filepath == "" {
-		fmt.Println("No filepath argument provided")
+	filepath, err := getFilepath()
+	if err != nil {
+		fmt.Println(err)
 		os.Exit(1)
 	}
 
@@ -56,4 +54,21 @@ func main() {
 	if err := program.Start(); err != nil {
 		os.Exit(1)
 	}
+}
+
+// getFilepath return the filepath and validates that
+// 1) the first argument exists and
+// 2) the first argument is a file that exists.
+func getFilepath() (string, error) {
+	if len(os.Args) <= 1 {
+		return "", errors.New("filepath argument is required")
+	}
+
+	// validate file path exists
+	filepath := os.Args[1]
+	if _, err := os.Stat(filepath); os.IsNotExist(err) {
+		return "", errors.New("database file does not exist")
+	}
+
+	return filepath, nil
 }
